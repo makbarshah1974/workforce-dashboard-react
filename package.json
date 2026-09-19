@@ -1,0 +1,31 @@
+{
+  "name": "workforce-dashboard-react",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Workforce & Machine Dashboard - React + Cloudflare Workers",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api dev",
+    "build": "pnpm --filter web build && pnpm --filter api build",
+    "build:web": "pnpm --filter web build",
+    "build:api": "pnpm --filter api build",
+    "deploy:web": "pnpm --filter web deploy",
+    "deploy:api": "pnpm --filter api deploy",
+    "lint": "pnpm --filter web lint && pnpm --filter api lint",
+    "typecheck": "pnpm --filter web typecheck && pnpm --filter api typecheck",
+    "test": "pnpm --filter web test && pnpm --filter api test",
+    "db:push": "pnpm --filter api db:push",
+    "db:seed": "pnpm --filter api db:seed"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "pnpm@9.6.0"
+}

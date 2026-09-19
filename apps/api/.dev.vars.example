@@ -1,0 +1,13 @@
+# Database
+DATABASE_URL="postgresql://user:pass@host/db?sslmode=require"
+
+# JWT
+JWT_SECRET="your-super-secret-jwt-key-min-32-chars"
+
+# VAPID Keys for Web Push (generate with: npx web-push generate-vapid-keys)
+VAPID_PUBLIC_KEY="your-vapid-public-key"
+VAPID_PRIVATE_KEY="your-vapid-private-key"
+VAPID_SUBJECT="mailto:admin@metex.com"
+
+# Frontend URL
+FRONTEND_URL="http://localhost:3000"
