@@ -159,10 +159,13 @@ export default function Notifications() {
                     )}
                   >
                     <div className={cn('p-2 rounded-lg flex-shrink-0', typeColors[notification.type])}>
-                      <Icon className="h-5 w-5" />
+                      {(() => {
+                        const IconComp = typeIcons[notification.type] || Bell;
+                        return React.createElement(IconComp, { className: "h-5 w-5" });
+                      })()}
                     </div>
                     <div className="flex-1 min-w-0">
-                      {notification.action_url && (
+                      {notification.action_url ? (
                         <a href={notification.action_url} className="block">
                           <p className={cn('font-medium', !notification.read ? 'text-white' : 'text-slate-300')}>
                             {notification.title}

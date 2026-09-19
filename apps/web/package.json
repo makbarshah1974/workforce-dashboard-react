@@ -13,18 +13,21 @@
     "deploy": "wrangler pages deploy dist --project-name=workforce-dashboard"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.0",
+    "@hookform/resolvers": "^5.9.1",
     "chart.js": "^4.4.4",
-    "react-chartjs-2": "^5.2.0",
-    "xlsx": "^0.18.5",
-    "date-fns": "^3.6.0",
-    "zod": "^3.23.8",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^2.4.0",
+    "date-fns": "^3.6.0",
+    "date-fns-tz": "^3.1.0",
     "lucide-react": "^0.424.0",
-    "sonner": "^1.5.0"
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.88.0",
+    "react-router-dom": "^6.26.0",
+    "sonner": "^1.5.0",
+    "tailwind-merge": "^2.4.0",
+    "xlsx": "^0.18.5",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

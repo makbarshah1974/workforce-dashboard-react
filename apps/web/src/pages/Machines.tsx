@@ -228,7 +228,11 @@ export default function Machines() {
                             statusColors[machine.status as keyof typeof statusColors]
                           )}
                         >
-                          <statusIcons[machine.status as keyof typeof statusIcons] className="h-3 w-3" />
+                          {(statusIcons[machine.status as keyof typeof statusIcons] || Factory) as React.ComponentType<{ className?: string }> ? (
+                            React.createElement(statusIcons[machine.status as keyof typeof statusIcons] || Factory, { className: "h-3 w-3" })
+                          ) : (
+                            <Factory className="h-3 w-3" />
+                          )}
                           {machine.status}
                         </span>
                       </td>
