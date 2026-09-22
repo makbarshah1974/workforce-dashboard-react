@@ -48,3 +48,6 @@ wrangler.toml.local
 tmp/
 temp/
 *.tmp
+
+# Database
+*.db

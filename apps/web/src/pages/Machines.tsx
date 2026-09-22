@@ -15,8 +15,11 @@ import {
   Zap,
   Monitor,
   AlertTriangle,
+  ChevronUp,
+  ChevronDown,
+  Factory,
 } from 'lucide-react';
-import { Machine, PaginatedResponse } from '@shared';
+import { Machine, PaginatedResponse } from '../../../../packages/shared/src';
 import MachineModal from '../components/MachineModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 
@@ -305,3 +308,5 @@ export default function Machines() {
     </div>
   );
 }
+
+

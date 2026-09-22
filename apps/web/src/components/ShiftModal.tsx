@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook_form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { X, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { api } from '../services/api';
-import { Shift } from '@shared';
+import { Shift } from '../../../../packages/shared/src';
 import { cn } from '../utils/cn';
 
 const shiftSchema = z.object({
@@ -47,7 +47,7 @@ export default function ShiftModal({ isOpen, onClose, onSuccess, initialData }: 
     setValue,
     watch,
   } = useForm<ShiftForm>({
-    resolver: zodResolver(shiftSchema),
+    resolver: zodResolver(shiftSchema) as any,
     defaultValues: {
       name: '',
       start_time: '06:00',
@@ -167,3 +167,5 @@ export default function ShiftModal({ isOpen, onClose, onSuccess, initialData }: 
     </div>
   );
 }
+
+

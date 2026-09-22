@@ -15,7 +15,7 @@ import {
   FileText,
   BarChart2,
 } from 'lucide-react';
-import { Report, PaginatedResponse } from '@shared';
+import { Report, PaginatedResponse } from '../../../../packages/shared/src';
 import ReportModal from '../components/ReportModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 
@@ -181,3 +181,5 @@ export default function Reports() {
     </div>
   );
 }
+
+

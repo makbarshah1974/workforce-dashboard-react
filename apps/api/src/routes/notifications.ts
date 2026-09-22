@@ -3,8 +3,9 @@ import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { createDb } from '../db';
 import { notifications, pushSubscriptions, users } from '../db/schema';
-import { eq, desc, and, count, sql } from 'drizzle-orm';
+import { eq, desc, and, count } from 'drizzle-orm';
 import webPush from 'web-push';
+import type { AuthContext } from '../types/context';
 
 const querySchema = z.object({
   page: z.coerce.number().min(1).default(1),
@@ -20,13 +21,13 @@ const subscriptionSchema = z.object({
   }),
 });
 
-export const notificationRoutes = new Hono()
+export const notificationRoutes = new Hono<AuthContext>()
   .get('/', zValidator('query', querySchema), async (c) => {
     const { page, page_size, unread_only } = c.req.valid('query');
     const user = c.get('user');
     const db = createDb(c.env);
 
-    let query = db.select().from(notifications).where(eq(notifications.user_id, user.id));
+    let query = db.select().from(notifications).where(eq(notifications.user_id, user.id)) as any;
     if (unread_only === 'true') {
       query = query.where(eq(notifications.read, false));
     }
@@ -34,9 +35,9 @@ export const notificationRoutes = new Hono()
 
     const total = await db.select({ count: count() })
       .from(notifications)
-      .where(and(eq(notifications.user_id, user.id), unread_only === 'true' ? eq(notifications.read, false) : undefined));
+      .where(and(eq(notifications.user_id, user.id), unread_only === 'true' ? eq(notifications.read, false) : undefined)) as any;
 
-    const data = await query.limit(page_size).offset((page - 1) * page_size);
+    const data = await query.limit(page_size).offset((page - 1) * page_size) as any;
 
     return c.json({
       data,
@@ -52,7 +53,7 @@ export const notificationRoutes = new Hono()
 
     const result = await db.select({ count: count() })
       .from(notifications)
-      .where(and(eq(notifications.user_id, user.id), eq(notifications.read, false)));
+      .where(and(eq(notifications.user_id, user.id), eq(notifications.read, false))) as any;
 
     return c.json({ count: result[0].count });
   })
@@ -63,7 +64,7 @@ export const notificationRoutes = new Hono()
     const [notification] = await db.update(notifications)
       .set({ read: true })
       .where(and(eq(notifications.id, c.req.param('id')), eq(notifications.user_id, user.id)))
-      .returning();
+      .returning() as any;
 
     if (!notification) return c.json({ error: 'Notification not found' }, 404);
     return c.json({ data: notification });
@@ -84,7 +85,7 @@ export const notificationRoutes = new Hono()
 
     const [notification] = await db.delete(notifications)
       .where(and(eq(notifications.id, c.req.param('id')), eq(notifications.user_id, user.id)))
-      .returning();
+      .returning() as any;
 
     if (!notification) return c.json({ error: 'Notification not found' }, 404);
     return c.json({ message: 'Notification deleted' });
@@ -96,7 +97,7 @@ export const notificationRoutes = new Hono()
 
     const existing = await db.select().from(pushSubscriptions)
       .where(and(eq(pushSubscriptions.user_id, user.id), eq(pushSubscriptions.endpoint, endpoint)))
-      .limit(1);
+      .limit(1) as any;
 
     if (existing.length) {
       return c.json({ message: 'Already subscribed' });
@@ -107,7 +108,7 @@ export const notificationRoutes = new Hono()
       endpoint,
       p256dh: keys.p256dh,
       auth: keys.auth,
-    }).returning();
+    }).returning() as any;
 
     return c.json({ data: subscription }, 201);
   })
@@ -125,9 +126,8 @@ export const notificationRoutes = new Hono()
     return c.json({ publicKey: c.env.VAPID_PUBLIC_KEY });
   });
 
-// Helper function to send push notification
 export async function sendPushNotification(
-  env: { VAPID_PUBLIC_KEY: string; VAPID_PRIVATE_KEY: string; VAPID_SUBJECT: string },
+  env: { DATABASE_URL: string; VAPID_PUBLIC_KEY: string; VAPID_PRIVATE_KEY: string; VAPID_SUBJECT: string },
   userId: string,
   title: string,
   message: string,
@@ -138,9 +138,9 @@ export async function sendPushNotification(
   const subscriptions = await db.select().from(pushSubscriptions).where(eq(pushSubscriptions.user_id, userId));
 
   webPush.setVapidDetails(
-    env.VAPID_SUBJECT,
-    env.VAPID_PUBLIC_KEY,
-    env.VAPID_PRIVATE_KEY
+    (env as any).VAPID_SUBJECT,
+    (env as any).VAPID_PUBLIC_KEY,
+    (env as any).VAPID_PRIVATE_KEY
   );
 
   const payload = JSON.stringify({ title, message, type, actionUrl });
@@ -163,7 +163,6 @@ export async function sendPushNotification(
   }
 }
 
-// Helper to create in-app notification
 export async function createNotification(
   env: { DATABASE_URL: string },
   userId: string,

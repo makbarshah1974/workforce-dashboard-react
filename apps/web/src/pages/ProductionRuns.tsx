@@ -19,7 +19,7 @@ import {
   FileText,
   RotateCcw,
 } from 'lucide-react';
-import { ProductionRun, PaginatedResponse, Machine, Product, Group } from '@shared';
+import { ProductionRun, PaginatedResponse, Machine, Product, Group } from '../../../../packages/shared/src';
 import RunModal from '../components/RunModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 
@@ -306,3 +306,5 @@ export default function ProductionRuns() {
     </div>
   );
 }
+
+

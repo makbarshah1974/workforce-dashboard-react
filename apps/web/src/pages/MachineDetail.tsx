@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../services/api';
-import { Machine } from '@shared';
+import { Machine } from '../../../../packages/shared/src';
 import { formatDateTime } from '../utils/date';
 import { cn } from '../utils/cn';
 import { Loader2, ArrowLeft, Factory, Zap, Wrench, Monitor, AlertTriangle, MapPin, Tag, Clock } from 'lucide-react';
@@ -118,3 +118,5 @@ export default function MachineDetail() {
     </div>
   );
 }
+
+

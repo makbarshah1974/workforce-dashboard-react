@@ -14,7 +14,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-import { Notification, PaginatedResponse } from '@shared';
+import { Notification, PaginatedResponse } from '../../../../packages/shared/src';
 import ConfirmDialog from '../components/ConfirmDialog';
 
 const typeIcons = {
@@ -219,3 +219,5 @@ export default function Notifications() {
     </div>
   );
 }
+
+

@@ -18,7 +18,7 @@ import {
   Sun,
   Monitor,
 } from 'lucide-react';
-import { User as UserType } from '@shared';
+import { User as UserType } from '../../../../packages/shared/src';
 
 export default function Profile() {
   const { user, refreshUser } = useAuth();
@@ -189,3 +189,5 @@ export default function Profile() {
     </div>
   );
 }
+
+

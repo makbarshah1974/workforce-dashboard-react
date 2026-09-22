@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../services/api';
-import { Worker } from '@shared';
+import { Worker } from '../../../../packages/shared/src';
 import { formatDate, formatRelative } from '../utils/date';
 import { cn } from '../utils/cn';
 import { Loader2, ArrowLeft, User, Mail, Phone, Calendar, Shield, Award, Wrench } from 'lucide-react';
@@ -110,3 +110,5 @@ export default function WorkerDetail() {
     </div>
   );
 }
+
+

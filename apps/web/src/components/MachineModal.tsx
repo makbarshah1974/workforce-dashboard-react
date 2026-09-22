@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { X, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { api } from '../services/api';
-import { Machine } from '@shared';
+import { Machine } from '../../../../packages/shared/src';
 import { cn } from '../utils/cn';
 
 const machineSchema = z.object({
@@ -44,7 +44,7 @@ export default function MachineModal({ isOpen, onClose, onSuccess, initialData }
     setValue,
     watch,
   } = useForm<MachineForm>({
-    resolver: zodResolver(machineSchema),
+    resolver: zodResolver(machineSchema) as any,
     defaultValues: {
       machine_code: '',
       name: '',
@@ -314,3 +314,5 @@ export default function MachineModal({ isOpen, onClose, onSuccess, initialData }
     </div>
   );
 }
+
+

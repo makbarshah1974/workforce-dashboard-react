@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { X, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { api } from '../services/api';
-import { ProductionRun, Machine, Product, Group } from '@shared';
+import { ProductionRun, Machine, Product, Group } from '../../../../packages/shared/src';
 import { cn } from '../utils/cn';
 
 const runSchema = z.object({
@@ -214,3 +214,5 @@ export default function RunModal({ isOpen, onClose, onSuccess, initialData, mach
     </div>
   );
 }
+
+

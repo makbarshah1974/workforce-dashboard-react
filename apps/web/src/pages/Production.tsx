@@ -14,8 +14,10 @@ import {
   ChevronRight,
   Download,
   FileText,
+  ChevronUp,
+  ChevronDown,
 } from 'lucide-react';
-import { ProductionRecord, PaginatedResponse, Machine, Worker, Shift } from '@shared';
+import { ProductionRecord, PaginatedResponse, Machine, Worker, Shift } from '../../../../packages/shared/src';
 import ProductionModal from '../components/ProductionModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 
@@ -322,3 +324,5 @@ export default function Production() {
     </div>
   );
 }
+
+

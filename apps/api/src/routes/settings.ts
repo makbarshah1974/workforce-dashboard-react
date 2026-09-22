@@ -3,10 +3,11 @@ import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { createDb } from '../db';
 import { users } from '../db/schema';
-import { eq } from 'drizzle-orm';
-import { hash, compare } from 'bcryptjs';
+import { eq, and, sql } from 'drizzle-orm';
+import bcrypt from 'bcryptjs';
 import { sign } from 'hono/jwt';
 import { setCookie } from 'hono/cookie';
+import type { AuthContext } from '../types/context';
 
 const profileSchema = z.object({
   full_name: z.string().min(2).max(100),
@@ -30,7 +31,7 @@ const settingsSchema = z.object({
   time_format: z.enum(['12h', '24h']).optional(),
 });
 
-export const settingsRoutes = new Hono()
+export const settingsRoutes = new Hono<AuthContext>()
   .get('/profile', async (c) => {
     const user = c.get('user');
     const { password_hash, ...userWithoutPassword } = user;
@@ -55,10 +56,10 @@ export const settingsRoutes = new Hono()
     const user = c.get('user');
     const db = createDb(c.env);
 
-    const valid = await compare(current_password, user.password_hash);
+    const valid = await bcrypt.compare(current_password, user.password_hash);
     if (!valid) return c.json({ error: 'Current password is incorrect' }, 400);
 
-    const password_hash = await hash(new_password, 12);
+    const password_hash = await bcrypt.hash(new_password, 12);
     await db.update(users).set({ password_hash, updated_at: new Date() }).where(eq(users.id, user.id));
 
     return c.json({ message: 'Password updated successfully' });

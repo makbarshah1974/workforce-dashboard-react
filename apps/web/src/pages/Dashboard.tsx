@@ -25,7 +25,7 @@ import {
   Tooltip,
   Legend,
   Filler,
-  ChartJSData,
+  ChartData,
 } from 'chart.js';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
 import { format } from 'date-fns';
@@ -229,7 +229,7 @@ export default function Dashboard() {
           <h2 className="text-lg font-semibold text-white mb-4">Production Trend (7 Days)</h2>
           <div className="h-72">
             <Line
-              data={productionChartData as ChartJSData<'line'>}
+              data={productionChartData as ChartData<'line'>}
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
@@ -251,7 +251,7 @@ export default function Dashboard() {
           <h2 className="text-lg font-semibold text-white mb-4">Machine Status</h2>
           <div className="h-72 flex items-center justify-center">
             <Doughnut
-              data={machineStatusData as ChartJSData<'doughnut'>}
+              data={machineStatusData as ChartData<'doughnut'>}
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
@@ -268,7 +268,7 @@ export default function Dashboard() {
       {/* Recent Alerts */}
       <div className="bg-slate-800 rounded-xl border border-slate-700 p-6">
         <h2 className="text-lg font-semibold text-white mb-4">Recent Alerts</h2>
-        {stats?.recentAlerts?.length > 0 ? (
+        {stats?.recentAlerts && stats.recentAlerts.length > 0 ? (
           <div className="space-y-3">
             {stats.recentAlerts.map((alert) => (
               <div

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../services/api';
-import { ProductionRecord } from '@shared';
+import { ProductionRecord } from '../../../../packages/shared/src';
 import { formatDateTime, formatDuration } from '../utils/date';
 import { cn } from '../utils/cn';
 import { Loader2, ArrowLeft, Package, Factory, User, Clock, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
@@ -92,3 +92,5 @@ export default function ProductionDetail() {
     </div>
   );
 }
+
+

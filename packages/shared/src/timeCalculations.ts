@@ -131,16 +131,16 @@ export function splitShiftDay(segStart: Date, segEnd: Date): Map<string, { daySe
       nextDayStart = prevBounds.nextDayStart;
     }
 
-    const segEnd = nextDayStart < segEnd ? nextDayStart : segEnd;
+    const segEnd2 = nextDayStart < segEnd ? nextDayStart : segEnd;
     const key = dayStart.toISOString().split('T')[0];
-    const { daySeconds, nightSeconds } = splitDayNight(cur, segEnd);
+    const { daySeconds, nightSeconds } = splitDayNight(cur, segEnd2);
 
     const existing = out.get(key) || { daySeconds: 0, nightSeconds: 0 };
     existing.daySeconds += daySeconds;
     existing.nightSeconds += nightSeconds;
     out.set(key, existing);
 
-    cur = segEnd;
+    cur = segEnd2;
   }
 
   return out;

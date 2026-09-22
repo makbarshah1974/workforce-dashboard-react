@@ -12,8 +12,10 @@ import {
   Loader2,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
+  ChevronDown,
 } from 'lucide-react';
-import { Worker, PaginatedResponse } from '@shared';
+import { Worker, PaginatedResponse } from '../../../../packages/shared/src';
 import WorkerModal from '../components/WorkerModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 
@@ -319,3 +321,5 @@ export default function Workers() {
     </div>
   );
 }
+
+

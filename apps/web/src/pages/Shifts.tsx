@@ -17,7 +17,7 @@ import {
   Clock,
   CalendarDays,
 } from 'lucide-react';
-import { Shift, ShiftAssignment, PaginatedResponse, Worker } from '@shared';
+import { Shift, ShiftAssignment, PaginatedResponse, Worker } from '../../../../packages/shared/src';
 import ShiftModal from '../components/ShiftModal';
 import ShiftAssignmentModal from '../components/ShiftAssignmentModal';
 import ConfirmDialog from '../components/ConfirmDialog';
@@ -218,7 +218,7 @@ export default function Shifts() {
         </div>
 
         <ShiftModal isOpen={shiftModalOpen} onClose={() => { setShiftModalOpen(false); setEditingShift(null); }} onSuccess={fetchShifts} initialData={editingShift} />
-        <ConfirmDialog isOpen={!!deleteConfirm} onClose={() => setDeleteConfirm(null)} onConfirm={handleDelete} title="Delete Shift" message={`Delete ${deleteConfirm?.item.name}?`} variant="destructive" />
+        <ConfirmDialog isOpen={!!deleteConfirm} onClose={() => setDeleteConfirm(null)} onConfirm={handleDelete} title="Delete Shift" message={`Delete ${(deleteConfirm?.item as { name?: string })?.name || 'Shift'}?`} variant="destructive" />
       </div>
     );
   }
@@ -328,3 +328,5 @@ export default function Shifts() {
     </div>
   );
 }
+
+

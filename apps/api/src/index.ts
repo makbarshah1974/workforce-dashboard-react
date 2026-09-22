@@ -45,20 +45,29 @@ app.use('/api/*', cors({
   maxAge: 86400,
 }));
 
+// Apply auth middleware to all /api/* routes except health and auth
+app.use('/api/*', async (c, next) => {
+  const path = c.req.path;
+  if (path.startsWith('/api/health') || path.startsWith('/api/auth')) {
+    return next();
+  }
+  return authMiddleware(c as any, next);
+});
+
 app.onError(errorHandler);
 
 app.route('/api/health', healthRoutes);
 app.route('/api/auth', authRoutes);
-app.route('/api/workers', authMiddleware, workerRoutes);
-app.route('/api/machines', authMiddleware, machineRoutes);
-app.route('/api/production', authMiddleware, productionRoutes);
-app.route('/api/runs', authMiddleware, runsRoutes);
-app.route('/api/shifts', authMiddleware, shiftRoutes);
-app.route('/api/reports', authMiddleware, reportRoutes);
-app.route('/api/notifications', authMiddleware, notificationRoutes);
-app.route('/api/settings', authMiddleware, settingsRoutes);
-app.route('/api/workforce', authMiddleware, workforceRoutes);
-app.route('/api/push', authMiddleware, pushRoutes);
+app.route('/api/workers', workerRoutes);
+app.route('/api/machines', machineRoutes);
+app.route('/api/production', productionRoutes);
+app.route('/api/runs', runsRoutes);
+app.route('/api/shifts', shiftRoutes);
+app.route('/api/reports', reportRoutes);
+app.route('/api/notifications', notificationRoutes);
+app.route('/api/settings', settingsRoutes);
+app.route('/api/workforce', workforceRoutes);
+app.route('/api/push', pushRoutes);
 
 app.get('/', (c) => c.json({ name: 'Workforce Dashboard API', version: '1.0.0' }));
 

@@ -1,14 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { api } from './services/api';
+import { api } from '../services/api';
 
-interface User {
-  id: string;
-  username: string;
-  email: string;
-  role: 'admin' | 'manager' | 'operator';
-  full_name: string;
-  avatar_url?: string;
-}
+import { User } from '../../../../packages/shared/src';
 
 interface AuthContextType {
   user: User | null;

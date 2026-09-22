@@ -1,4 +1,5 @@
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const FETCH_TIMEOUT = 5000;
 
 class ApiClient {
   private baseUrl: string;
@@ -12,49 +13,63 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
-    const response = await fetch(url, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-      credentials: 'include',
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
 
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Request failed' }));
-      throw new Error(error.message || `HTTP ${response.status}`);
+    try {
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+        credentials: 'include',
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ message: 'Request failed' }));
+        throw new Error(error.message || `HTTP ${response.status}`);
+      }
+
+      if (response.status === 204) {
+        return {} as T;
+      }
+
+      return response.json();
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error('Request timeout - API server may not be running');
+      }
+      throw error;
     }
-
-    if (response.status === 204) {
-      return {} as T;
-    }
-
-    return response.json();
   }
 
   get<T>(endpoint: string): Promise<T> {
     return this.request<T>(endpoint, { method: 'GET' });
   }
 
-  post<T>(endpoint: string, data: unknown): Promise<T> {
+  post<T>(endpoint: string, data?: unknown): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: data !== undefined ? JSON.stringify(data) : undefined,
     });
   }
 
-  put<T>(endpoint: string, data: unknown): Promise<T> {
+  put<T>(endpoint: string, data?: unknown): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PUT',
-      body: JSON.stringify(data),
+      body: data !== undefined ? JSON.stringify(data) : undefined,
     });
   }
 
-  patch<T>(endpoint: string, data: unknown): Promise<T> {
+  patch<T>(endpoint: string, data?: unknown): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PATCH',
-      body: JSON.stringify(data),
+      body: data !== undefined ? JSON.stringify(data) : undefined,
     });
   }
 

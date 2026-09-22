@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { X, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { api } from '../services/api';
-import { Worker } from '@shared';
+import { Worker } from '../../../../packages/shared/src';
 import { cn } from '../utils/cn';
 
 const workerSchema = z.object({
@@ -51,7 +51,7 @@ export default function WorkerModal({ isOpen, onClose, onSuccess, initialData }:
     watch,
     control,
   } = useForm<WorkerForm>({
-    resolver: zodResolver(workerSchema),
+    resolver: zodResolver(workerSchema) as any,
     defaultValues: {
       employee_id: '',
       full_name: '',
@@ -379,3 +379,5 @@ export default function WorkerModal({ isOpen, onClose, onSuccess, initialData }:
     </div>
   );
 }
+
+

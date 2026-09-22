@@ -5,8 +5,12 @@ export interface User {
   role: 'admin' | 'manager' | 'operator';
   full_name: string;
   avatar_url?: string;
+  display_name?: string;
   created_at: string;
   updated_at: string;
+  last_login?: string;
+  theme?: 'dark' | 'light' | 'system';
+  password_hash?: string;
 }
 
 export interface Worker {
@@ -50,6 +54,9 @@ export interface Machine {
   specifications: Record<string, unknown>;
   created_at: string;
   updated_at: string;
+  day_hours?: number;
+  night_hours?: number;
+  notes?: string;
 }
 
 export interface ProductionRecord {
@@ -68,6 +75,9 @@ export interface ProductionRecord {
   notes?: string;
   created_at: string;
   updated_at: string;
+  machine_name?: string;
+  worker_name?: string;
+  shift_name?: string;
 }
 
 export interface ProductionRun {
@@ -111,6 +121,29 @@ export interface ShiftAssignment {
   status: 'scheduled' | 'completed' | 'absent' | 'late';
   created_at: string;
   updated_at: string;
+  worker_name?: string;
+  shift_name?: string;
+  shift_start?: string;
+  shift_end?: string;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  code: string;
+  group_id: string | null;
+  target_qty: number;
+  unit: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Group {
+  id: string;
+  name: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Notification {
@@ -131,6 +164,7 @@ export interface Report {
   filters: Record<string, unknown>;
   generated_at: string;
   generated_by: string;
+  generated_by_name?: string;
   file_url?: string;
 }
 

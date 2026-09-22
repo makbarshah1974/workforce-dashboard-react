@@ -5,8 +5,9 @@ import { sign, verify } from 'hono/jwt';
 import { createDb } from '../db';
 import { users } from '../db/schema';
 import { eq } from 'drizzle-orm';
-import { hash, compare } from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import { setCookie, deleteCookie, getCookie } from 'hono/cookie';
+import type { Env } from '../index';
 
 const loginSchema = z.object({
   username: z.string().min(3),
@@ -21,7 +22,7 @@ const registerSchema = z.object({
   role: z.enum(['admin', 'manager', 'operator']).default('operator'),
 });
 
-export const authRoutes = new Hono()
+export const authRoutes = new Hono<{ Bindings: Env }>()
   .post('/login', zValidator('json', loginSchema), async (c) => {
     const { username, password } = c.req.valid('json');
     const db = createDb(c.env);
@@ -31,7 +32,7 @@ export const authRoutes = new Hono()
       return c.json({ error: 'Invalid credentials' }, 401);
     }
 
-    const valid = await compare(password, user[0].password_hash);
+    const valid = await bcrypt.compare(password, user[0].password_hash);
     if (!valid) {
       return c.json({ error: 'Invalid credentials' }, 401);
     }
@@ -63,6 +64,7 @@ export const authRoutes = new Hono()
     const { username, email, password, full_name, role } = c.req.valid('json');
     const db = createDb(c.env);
 
+    // @ts-ignore - drizzle type inference
     const existing = await db.select().from(users).where(eq(users.username, username)).limit(1);
     if (existing.length) {
       return c.json({ error: 'Username already exists' }, 409);
@@ -73,7 +75,7 @@ export const authRoutes = new Hono()
       return c.json({ error: 'Email already exists' }, 409);
     }
 
-    const password_hash = await hash(password, 12);
+    const password_hash = await bcrypt.hash(password, 12);
     const [newUser] = await db.insert(users).values({
       username,
       email,
@@ -110,7 +112,7 @@ export const authRoutes = new Hono()
     }
 
     try {
-      const payload = await verify(token, c.env.JWT_SECRET) as { sub: string };
+      const payload = await verify(token, c.env.JWT_SECRET, 'HS256') as { sub: string; role: string };
       const db = createDb(c.env);
       const user = await db.select().from(users).where(eq(users.id, payload.sub)).limit(1);
 
@@ -131,7 +133,7 @@ export const authRoutes = new Hono()
     }
 
     try {
-      const payload = await verify(token, c.env.JWT_SECRET) as { sub: string; username: string; role: string };
+      const payload = await verify(token, c.env.JWT_SECRET, 'HS256') as { sub: string; username: string; role: string };
       const newToken = await sign(
         { sub: payload.sub, username: payload.username, role: payload.role },
         c.env.JWT_SECRET,

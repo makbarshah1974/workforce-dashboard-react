@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { X, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { api } from '../services/api';
-import { ShiftAssignment, Worker, Shift } from '@shared';
+import { ShiftAssignment, Worker, Shift } from '../../../../packages/shared/src';
 import { cn } from '../utils/cn';
 
 const assignmentSchema = z.object({
@@ -36,7 +36,7 @@ export default function ShiftAssignmentModal({ isOpen, onClose, onSuccess, initi
     reset,
     formState: { errors },
   } = useForm<AssignmentForm>({
-    resolver: zodResolver(assignmentSchema),
+    resolver: zodResolver(assignmentSchema) as any,
     defaultValues: {
       worker_id: '',
       shift_id: '',
@@ -134,3 +134,5 @@ export default function ShiftAssignmentModal({ isOpen, onClose, onSuccess, initi
     </div>
   );
 }
+
+

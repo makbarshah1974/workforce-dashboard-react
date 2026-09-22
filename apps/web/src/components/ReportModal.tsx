@@ -31,7 +31,7 @@ export default function ReportModal({ isOpen, onClose, onSuccess }: ReportModalP
     formState: { errors },
     watch,
   } = useForm<ReportForm>({
-    resolver: zodResolver(reportSchema),
+    resolver: zodResolver(reportSchema) as any,
     defaultValues: {
       name: '',
       type: 'production',

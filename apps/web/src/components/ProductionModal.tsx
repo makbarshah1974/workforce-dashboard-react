@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { X, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { api } from '../services/api';
-import { ProductionRecord, Machine, Worker, Shift } from '@shared';
+import { ProductionRecord, Machine, Worker, Shift } from '../../../../packages/shared/src';
 import { cn } from '../utils/cn';
 
 const productionSchema = z.object({
@@ -45,7 +45,7 @@ export default function ProductionModal({ isOpen, onClose, onSuccess, initialDat
     reset,
     formState: { errors },
   } = useForm<ProductionForm>({
-    resolver: zodResolver(productionSchema),
+    resolver: zodResolver(productionSchema) as any,
     defaultValues: {
       machine_id: '',
       worker_id: '',
@@ -328,3 +328,5 @@ export default function ProductionModal({ isOpen, onClose, onSuccess, initialDat
     </div>
   );
 }
+
+
